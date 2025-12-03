@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Men's Store</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js" type="module"></script>
-<script src="script.js" type="module"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Men's Store</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="supabase.js"></script>
+  <script type="module" src="script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
+<!-- Header -->
+<header class="bg-white shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+  <!-- Logo -->
+  <div class="text-xl sm:text-2xl font-bold">Men's Store</div>
 
-<header class="bg-white shadow p-4 flex justify-between items-center">
-<h1 class="text-2xl font-bold">Men's Store</h1>
-<nav class="space-x-6 text-lg font-medium">
-<button class="category-btn" data-category="home">Home</button>
-<button class="category-btn" data-category="watches">Watches</button>
-<button class="category-btn" data-category="shirts">Shirts</button>
-<button class="category-btn" data-category="shoes">Shoes</button>
-<button id="cart-btn" class="bg-blue-600 text-white px-3 py-1 rounded">
-      Cart (<span id="cartCount">0</span>)
-    </button>
+  <!-- Navigation -->
+  <nav class="flex flex-wrap gap-2 sm:gap-4 justify-start sm:justify-center text-sm sm:text-base">
+    <a href="index.html" class="hover:underline">Home</a>
+    <a href="#" class="hover:underline category-btn" data-category="watches">Watches</a>
+    <a href="#" class="hover:underline category-btn" data-category="shirts">Shirts</a>
+    <a href="#" class="hover:underline category-btn" data-category="shoes">Shoes</a>
+  </nav>
 
-</nav>
+  <!-- Cart button -->
+  <button id="cart-btn" class="bg-blue-600 text-white px-3 py-1 rounded ml-auto sm:ml-0">
+    Cart (<span id="cartCount">0</span>)
+  </button>
 </header>
 
-
-<main class="p-6">
-<div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+<!-- Main Content -->
+<main class="max-w-6xl mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4">Products</h2>
+  <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <!-- Products will be rendered here via script.js -->
+  </div>
 </main>
-
 
 </body>
 </html>
