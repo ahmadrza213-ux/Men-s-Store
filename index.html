@@ -12,20 +12,20 @@
 <body class="bg-gray-100 min-h-screen">
 
 <!-- Header -->
-<header class="bg-white shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+<header class="bg-white shadow p-4 flex flex-wrap items-center justify-between gap-2">
   <!-- Logo -->
   <div class="text-xl sm:text-2xl font-bold">Men's Store</div>
 
   <!-- Navigation -->
-  <nav class="flex flex-wrap gap-2 sm:gap-4 justify-start sm:justify-center text-sm sm:text-base">
-    <a href="index.html" class="hover:underline">Home</a>
-    <a href="#" class="hover:underline category-btn" data-category="watches">Watches</a>
-    <a href="#" class="hover:underline category-btn" data-category="shirts">Shirts</a>
-    <a href="#" class="hover:underline category-btn" data-category="shoes">Shoes</a>
+  <nav class="flex flex-wrap gap-2">
+    <a href="#" class="nav-btn px-2 py-1 rounded hover:bg-gray-200" data-category="home">Home</a>
+    <a href="#" class="nav-btn px-2 py-1 rounded hover:bg-gray-200" data-category="watches">Watches</a>
+    <a href="#" class="nav-btn px-2 py-1 rounded hover:bg-gray-200" data-category="shirts">Shirts</a>
+    <a href="#" class="nav-btn px-2 py-1 rounded hover:bg-gray-200" data-category="shoes">Shoes</a>
   </nav>
 
   <!-- Cart button -->
-  <button id="cart-btn" class="bg-blue-600 text-white px-3 py-1 rounded ml-auto sm:ml-0">
+  <button id="cart-btn" class="bg-blue-600 text-white px-3 py-1 rounded ml-auto">
     Cart (<span id="cartCount">0</span>)
   </button>
 </header>
