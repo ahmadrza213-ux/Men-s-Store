@@ -27,11 +27,23 @@
 
   <label class="block font-semibold mt-4">Your Email:</label>
   <input type="email" id="user-email" class="w-full p-2 border rounded" placeholder="Enter your email" required>
+<label class="block font-semibold mt-4">Delivery Address:</label>
+<textarea id="user-address" class="w-full p-2 border rounded" placeholder="Enter your address" required></textarea>
+
+<label class="block font-semibold mt-4">Payment Method:</label>
+<select id="payment-method" class="w-full p-2 border rounded" required>
+  <option value="">Select Payment</option>
+  <option value="Credit Card">Credit Card</option>
+  <option value="Cash on Delivery">Cash on Delivery</option>
+  <option value="PayPal">PayPal</option>
+</select>
 
   <button id="confirm-order-btn" class="bg-green-600 text-white px-4 py-2 rounded mt-4">
     Place Order
   </button>
+  
 </main>
 
 </body>
 </html>
+
