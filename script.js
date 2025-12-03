@@ -136,46 +136,39 @@ window.changeQty = function(id, amount) {
 };
 
 // Confirm order
-const confirmBtn = document.getElementById("confirm-order-btn");
+const emailInput = document.getElementById("user-email");
+const addressInput = document.getElementById("user-address");
+const paymentSelect = document.getElementById("payment-method");
 
-if (confirmBtn) {
-  confirmBtn.addEventListener("click", async () => {
-    const emailInput = document.getElementById("user-email");
-    const userEmail = emailInput ? emailInput.value.trim() : "";
+const userEmail = emailInput ? emailInput.value.trim() : "";
+const address = addressInput ? addressInput.value.trim() : "";
+const payment = paymentSelect ? paymentSelect.value : "";
 
-    if (!userEmail) {
-      alert("Please enter your email!");
-      return;
-    }
+if (!userEmail) { alert("Enter email"); return; }
+if (!address) { alert("Enter address"); return; }
+if (!payment) { alert("Select payment method"); return; }
 
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
+// Prepare order object
+const orderData = {
+  user_email: userEmail,
+  order_items: cart,
+  total: cart.reduce((sum,p)=>sum+p.price*p.qty,0).toFixed(2),
+  address: address,
+  payment_method: payment
+};
 
-    const total = cart.reduce((sum, p) => sum + p.price * p.qty, 0).toFixed(2);
-
-    // Prepare order data
-    const orderData = {
-      user_email: userEmail,
-      order_items: cart,
-      total: total
-    };
-
-    // Insert into Supabase orders table
-    const { data, error } = await supabase.from("orders").insert([orderData]);
-
-    if (error) {
-      console.error(error);
-      alert("Failed to place order. Try again!");
-    } else {
-      alert(`Order placed successfully! Total: $${total}`);
-      // Clear cart
-      cart = [];
-      saveCart();
-      renderCart();
-      updateCartCount();
-      emailInput.value = "";
-    }
-  });
+// Save to Supabase
+const { data, error } = await supabase.from("orders").insert([orderData]);
+if (error) {
+  alert("Failed to place order!");
+  console.error(error);
+} else {
+  alert("Order placed successfully!");
+  cart = [];
+  saveCart();
+  renderCart();
+  updateCartCount();
+  emailInput.value = "";
+  addressInput.value = "";
+  paymentSelect.value = "";
 }
