@@ -2,23 +2,18 @@ import { supabase } from './supabase.js';
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Update cart count in header
+// ---------------------- UTILITY ---------------------- //
 function updateCartCount() {
   const cartCountEl = document.getElementById('cartCount');
-  if (cartCountEl) {
-    cartCountEl.innerText = cart.reduce((sum, p) => sum + p.qty, 0);
-  }
+  if (cartCountEl) cartCountEl.innerText = cart.reduce((sum, p) => sum + p.qty, 0);
 }
 
-// Save cart to localStorage
 function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
 }
 
-// --------------------- HOMEPAGE FUNCTIONS --------------------- //
-
-// Fetch products from Supabase
+// ---------------------- HOMEPAGE ---------------------- //
 async function fetchProducts(category = null) {
   let query = supabase.from('products').select('*');
   if (category && category !== 'home') query = query.eq('category', category);
@@ -28,7 +23,6 @@ async function fetchProducts(category = null) {
   renderProducts(data);
 }
 
-// Render products on homepage
 function renderProducts(products) {
   const container = document.getElementById('products-container');
   if (!container) return;
@@ -53,46 +47,21 @@ function renderProducts(products) {
   });
 }
 
-// Add product to cart
 window.addToCart = function(id, name, price, image) {
   const found = cart.find(item => item.id === id);
   if (found) found.qty += 1;
   else cart.push({ id, name, price, image, qty: 1 });
   saveCart();
   alert('Added to cart!');
-};
+}
 
-// Category buttons
-document.addEventListener('DOMContentLoaded', () => {
-  fetchProducts();
-
-  document.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      fetchProducts(btn.dataset.category);
-    });
-  });
-
-  // Cart button
-  const cartBtn = document.getElementById('cart-btn');
-  if (cartBtn) {
-    cartBtn.addEventListener('click', () => {
-      window.location.href = 'cart.html';
-    });
-  }
-
-  // Render cart if on cart page
-  if (document.getElementById('cart-items')) renderCart();
-});
-
-// --------------------- CART FUNCTIONS --------------------- //
-
+// ---------------------- CART ---------------------- //
 function renderCart() {
   const cartContainer = document.getElementById("cart-items");
   const totalPriceEl = document.getElementById("total-price");
-
   if (!cartContainer) return;
 
-  cartContainer.innerHTML = "";
+  cartContainer.innerHTML = '';
   let total = 0;
 
   cart.forEach(item => {
@@ -122,7 +91,6 @@ function renderCart() {
   if (totalPriceEl) totalPriceEl.innerText = total.toFixed(2);
 }
 
-// Change quantity in cart
 window.changeQty = function(id, amount) {
   const product = cart.find(p => p.id === id);
   if (!product) return;
@@ -133,36 +101,36 @@ window.changeQty = function(id, amount) {
   saveCart();
   renderCart();
   updateCartCount();
-};
+}
 
-// Confirm order
+// ---------------------- PLACE ORDER ---------------------- //
 const confirmBtn = document.getElementById("confirm-order-btn");
 
 if (confirmBtn) {
   confirmBtn.addEventListener("click", async () => {
     const emailInput = document.getElementById("user-email");
-    const userEmail = emailInput ? emailInput.value.trim() : "";
+    const addressInput = document.getElementById("user-address");
+    const paymentSelect = document.getElementById("payment-method");
 
-    if (!userEmail) {
-      alert("Please enter your email!");
-      return;
-    }
+    const userEmail = emailInput?.value.trim() || "";
+    const address = addressInput?.value.trim() || "";
+    const payment = paymentSelect?.value || "";
 
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
+    if (!userEmail) { alert("Please enter your email!"); return; }
+    if (!address) { alert("Please enter your address!"); return; }
+    if (!payment) { alert("Please select a payment method!"); return; }
+    if (cart.length === 0) { alert("Your cart is empty!"); return; }
 
     const total = cart.reduce((sum, p) => sum + p.price * p.qty, 0).toFixed(2);
 
-    // Prepare order data
     const orderData = {
       user_email: userEmail,
       order_items: cart,
-      total: total
+      total: total,
+      address: address,
+      payment_method: payment
     };
 
-    // Insert into Supabase orders table
     const { data, error } = await supabase.from("orders").insert([orderData]);
 
     if (error) {
@@ -170,12 +138,29 @@ if (confirmBtn) {
       alert("Failed to place order. Try again!");
     } else {
       alert(`Order placed successfully! Total: $${total}`);
-      // Clear cart
       cart = [];
       saveCart();
       renderCart();
       updateCartCount();
       emailInput.value = "";
+      addressInput.value = "";
+      paymentSelect.value = "";
     }
   });
 }
+
+// ---------------------- INITIALIZE ---------------------- //
+document.addEventListener('DOMContentLoaded', () => {
+  fetchProducts();
+
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', () => fetchProducts(btn.dataset.category));
+  });
+
+  const cartBtn = document.getElementById('cart-btn');
+  if (cartBtn) cartBtn.addEventListener('click', () => window.location.href = 'cart.html');
+
+  if (document.getElementById('cart-items')) renderCart();
+
+  updateCartCount();
+});
