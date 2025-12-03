@@ -46,6 +46,22 @@ function renderProducts(products) {
     `;
   });
 }
+// ---------------------- NAVIGATION ACTIVE HIGHLIGHT ---------------------- //
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Remove active from all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('bg-blue-600','text-white'));
+
+    // Add active to clicked button
+    btn.classList.add('bg-blue-600','text-white');
+
+    // Fetch products based on category
+    const category = btn.dataset.category;
+    fetchProducts(category);
+  });
+});
 
 window.addToCart = function(id, name, price, image) {
   const found = cart.find(item => item.id === id);
@@ -164,3 +180,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCartCount();
 });
+
