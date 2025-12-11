@@ -169,9 +169,7 @@ if (confirmBtn) {
 document.addEventListener('DOMContentLoaded', () => {
   fetchProducts();
 
-  document.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', () => fetchProducts(btn.dataset.category));
-  });
+ 
 
   const cartBtn = document.getElementById('cart-btn');
   if (cartBtn) cartBtn.addEventListener('click', () => window.location.href = 'cart.html');
@@ -180,4 +178,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCartCount();
 });
+
 
