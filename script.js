@@ -178,5 +178,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCartCount();
 });
+const loginBtn = document.getElementById("login-btn");
+const authModal = document.getElementById("auth-modal");
+const closeBtn = document.getElementById("auth-close");
+
+const authTitle = document.getElementById("auth-title");
+const emailInput = document.getElementById("auth-email");
+const passInput = document.getElementById("auth-password");
+const submitBtn = document.getElementById("auth-submit");
+const toggleAuth = document.getElementById("toggle-auth");
+const forgotPassword = document.getElementById("forgot-password");
+
+// State control
+let isLogin = true;
+
+// Open Modal
+loginBtn.addEventListener("click", () => {
+  authModal.classList.remove("hidden");
+});
+
+// Close Modal
+closeBtn.addEventListener("click", () => {
+  authModal.classList.add("hidden");
+});
+
+// Toggle Login <-> Signup
+toggleAuth.addEventListener("click", () => {
+  isLogin = !isLogin;
+
+  authTitle.innerText = isLogin ? "Login" : "Create Account";
+  submitBtn.innerText = isLogin ? "Login" : "Sign Up";
+  toggleAuth.innerText = isLogin
+    ? "Don't have an account? Create one"
+    : "Already have an account? Login";
+});
+
+// ------------------------ LOGIN / SIGNUP SUBMIT ------------------------
+submitBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passInput.value.trim();
+
+  if (!email || !password) {
+    alert("Enter email & password.");
+    return;
+  }
+
+  if (isLogin) {
+    // -------- LOGIN --------
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert("Login failed: " + error.message);
+    } else {
+      alert("Logged in!");
+      authModal.classList.add("hidden");
+    }
+
+  } else {
+    // -------- SIGNUP --------
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      alert("Signup failed: " + error.message);
+    } else {
+      alert("Account created! Check your email to verify.");
+      authModal.classList.add("hidden");
+    }
+  }
+});
+
+// ------------------------ RESET PASSWORD ------------------------
+forgotPassword.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    alert("Enter your email first!");
+    return;
+  }
+
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.href
+  });
+
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("Reset link sent to your email!");
+  }
+});
 
 
