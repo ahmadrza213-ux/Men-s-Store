@@ -2,9 +2,6 @@ import { supabase } from './supabase.js';
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-if (!localStorage.getItem('visited')) {
-  localStorage.setItem('cart', JSON.stringify([]));
-  localStorage.setItem('visited', 'yes');
 // ---------------------- UTILITY ---------------------- //
 function updateCartCount() {
   const cartCountEl = document.getElementById('cartCount');
@@ -275,6 +272,7 @@ forgotPassword.addEventListener("click", async () => {
     alert("Reset link sent to your email!");
   }
 });
+
 
 
 
